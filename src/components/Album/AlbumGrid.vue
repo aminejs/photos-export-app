@@ -7,7 +7,7 @@
                       <img :src="album.firstPic" :alt="album.name" class="img-rounded" height="300" width="300">
                   </div>          
                   <div class="col-lg-12 text-center">
-                      <p>{{ album.name }}</p>                  
+                      <router-link :to="{path: '/'+album.id}">{{ album.name }}</router-link>                  
                   </div>                                     
           </app-album>  
       <footer>
