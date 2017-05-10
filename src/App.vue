@@ -1,6 +1,6 @@
 <template>
 <div>
-<div class="container">
+<div class="container" v-if="['albumGridRoute', 'photoGridRoute'].indexOf($route.name) > -1">
     <div class="row">
          <div class="col-8">
          <app-header></app-header>

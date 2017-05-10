@@ -1,7 +1,12 @@
 <template>
   <div>
       <div class="row">
-        <div class="col-md-4"><h1>{{ currentAlbum }} Album </h1></div>
+        <div class="col-md-8"><h1>{{ currentAlbum }} Album </h1></div>
+        <div class="col-md-4 text-center some-top-magin">
+            <button class="btn btn-success" @click="confirmPhoto" :disabled="confirmButton">Confirm</button>
+           <app-photo-selected v-if="isSelected"></app-photo-selected>
+           <app-photo-uploaded v-if="isUploaded"></app-photo-uploaded>
+        </div>
       </div>
       <hr>
       <form>
@@ -31,10 +36,13 @@
 
 <script>
     import Photo from './Photo.vue'
+    import PhotoSelected from './Messages/PhotoSelected.vue'
+    import PhotoUploaded from './Messages/PhotoUploaded.vue'
     
     export default {
         data: function(){
           return{
+              userId: '123456',
               currentAlbum: '',
               albumId: this.$route.params.albumID,
               albums: [{name: "dogs",id: 1,pictures: ['https://cdn.pixabay.com/photo/2016/07/07/15/35/puppy-1502565_960_720.jpg']},
@@ -44,7 +52,7 @@
                        {name: "horses",id: 5, pictures: ['https://cdn.pixabay.com/photo/2013/10/17/20/59/horse-197199_960_720.jpg']},
                        {name: "backgounds",id: 6, pictures: ['https://cdn.pixabay.com/photo/2015/12/17/08/14/greeting-card-1096981_960_720.jpg']},
                        {name: "nature",id: 7, pictures: ['https://cdn.pixabay.com/photo/2015/10/22/17/45/leaf-1001679_960_720.jpg']},
-                       {name: "music",id: 8, pictures: ['https://cdn.pixabay.com/photo/2017/04/11/17/49/guitar-2222350_960_720.jpg','https://cdn.pixabay.com/photo/2017/04/20/08/38/flute-2245041_960_720.jpg','https://cdn.pixabay.com/photo/2014/07/31/23/49/guitarist-407212_960_720.jpg','https://cdn.pixabay.com/photo/2016/01/14/06/09/guitar-1139397_960_720.jpg','https://cdn.pixabay.com/photo/2015/02/19/19/18/drummers-642540_960_720.jpg','https://cdn.pixabay.com/photo/2015/05/07/11/02/guitar-756326_960_720.jpg','https://cdn.pixabay.com/photo/2015/07/31/15/01/guitar-869217_960_720.jpg','https://cdn.pixabay.com/photo/2015/12/27/05/48/turntable-1109588_960_720.jpg','https://cdn.pixabay.com/photo/2015/12/27/05/48/turntable-1109588_960_720.jpg','https://cdn.pixabay.com/photo/2014/07/05/08/15/harp-384557_960_720.jpg','https://cdn.pixabay.com/photo/2016/09/16/15/56/manhattan-1674404_960_720.jpg','https://cdn.pixabay.com/photo/2015/02/06/22/08/microphone-626618_960_720.jpg','https://cdn.pixabay.com/photo/2014/09/14/20/24/guitar-445387_960_720.jpg','https://cdn.pixabay.com/photo/2015/08/29/14/18/bass-913092_960_720.jpg','https://cdn.pixabay.com/photo/2015/06/16/16/48/guitar-811343_960_720.jpg','https://cdn.pixabay.com/photo/2015/03/26/10/22/band-691224_960_720.jpg','https://cdn.pixabay.com/photo/2014/05/21/15/18/musician-349790_960_720.jpg','https://cdn.pixabay.com/photo/2016/02/05/11/18/guitar-1180744_960_720.jpg','https://cdn.pixabay.com/photo/2014/12/30/06/04/mouse-583579_960_720.png','https://cdn.pixabay.com/photo/2016/12/01/07/30/music-1874621_960_720.jpg']},
+                       {name: "music",id: 8, pictures: ['https://cdn.pixabay.com/photo/2017/04/11/17/49/guitar-2222350_960_720.jpg','https://cdn.pixabay.com/photo/2017/04/20/08/38/flute-2245041_960_720.jpg','https://cdn.pixabay.com/photo/2014/07/31/23/49/guitarist-407212_960_720.jpg','https://cdn.pixabay.com/photo/2016/01/14/06/09/guitar-1139397_960_720.jpg','https://cdn.pixabay.com/photo/2015/02/19/19/18/drummers-642540_960_720.jpg','https://cdn.pixabay.com/photo/2015/05/07/11/02/guitar-756326_960_720.jpg','https://cdn.pixabay.com/photo/2015/07/31/15/01/guitar-869217_960_720.jpg','https://cdn.pixabay.com/photo/2015/12/27/05/48/turntable-1109588_960_720.jpg','https://cdn.pixabay.com/photo/2017/02/21/05/16/artist-2084696_960_720.jpg','https://cdn.pixabay.com/photo/2014/07/05/08/15/harp-384557_960_720.jpg','https://cdn.pixabay.com/photo/2016/09/16/15/56/manhattan-1674404_960_720.jpg','https://cdn.pixabay.com/photo/2015/02/06/22/08/microphone-626618_960_720.jpg','https://cdn.pixabay.com/photo/2014/09/14/20/24/guitar-445387_960_720.jpg','https://cdn.pixabay.com/photo/2015/08/29/14/18/bass-913092_960_720.jpg','https://cdn.pixabay.com/photo/2015/06/16/16/48/guitar-811343_960_720.jpg','https://cdn.pixabay.com/photo/2015/03/26/10/22/band-691224_960_720.jpg','https://cdn.pixabay.com/photo/2014/05/21/15/18/musician-349790_960_720.jpg','https://cdn.pixabay.com/photo/2016/02/05/11/18/guitar-1180744_960_720.jpg','https://cdn.pixabay.com/photo/2014/12/30/06/04/mouse-583579_960_720.png','https://cdn.pixabay.com/photo/2016/12/01/07/30/music-1874621_960_720.jpg']},
                        {name: "bikes",id: 9, pictures: ['https://cdn.pixabay.com/photo/2013/03/19/18/23/utah-95032_960_720.jpg']},
                        {name: "ocean",id: 10, pictures: ['https://cdn.pixabay.com/photo/2015/11/06/13/53/sea-1027999_960_720.jpg']},
                        {name: "elephant",id: 11, pictures: ['https://cdn.pixabay.com/photo/2017/04/19/06/49/elephant-2241360_960_720.jpg']},
@@ -61,6 +69,9 @@
                        {name: "monkeys",id: 22, pictures: ['https://cdn.pixabay.com/photo/2012/02/27/17/00/animal-17474_960_720.jpg']},
                        {name: "tigers",id: 23, pictures: ['https://cdn.pixabay.com/photo/2013/07/18/20/26/tiger-165039_960_720.jpg']},
                        {name: "rabbits",id: 24, pictures: ['https://cdn.pixabay.com/photo/2017/04/05/23/25/rabbit-2206752_960_720.jpg']}],
+              confirmButton: false,
+              isSelected: false,
+              isUploaded: false,
               albumsPhoto: [],         
               totalPages: 0,
               photosPerPage: [],
@@ -89,10 +100,39 @@
               this.albumsPerPage = [];
               let arrayEnd = (pageNum * this.perPage);
               this.photosPerPage = this.albumsPhoto.slice((arrayEnd - this.perPage),arrayEnd);            
-          }
+          },
+          confirmPhoto(){
+             if(this.selectedPhotos.length === 0){
+                 this.isSelected = true;
+             }else{
+                 this.confirmButton = true;
+                 this.isSelected = false;
+                 this.isUploaded = false;
+                 let dataToSend = {
+                                    userID: this.userId,
+                                    photo: this.selectedPhotos
+                                  };
+                 
+                 this.$http.post('', dataToSend)
+                           .then(response => {
+                                if(response.status === 200){
+                                    this.confirmButton = false;
+                                    this.$router.push('/'+this.albumId+'/success');
+                                }else{
+                                    this.isUploaded = true;
+                                }
+                            }, error => {
+                                this.isUploaded = true;
+                                this.confirmButton = false;
+                            });
+             }
+             
+         }    
         },
         components: {
-            appPhoto: Photo
+            appPhoto: Photo,
+            appPhotoSelected: PhotoSelected,
+            appPhotoUploaded: PhotoUploaded
         },
         created(){
             for (let i = 0; i < this.albums.length; i++) {
@@ -105,3 +145,7 @@
         }
     }
 </script>
+
+<style scoped>
+    .some-top-magin { margin-top:20px; }
+</style>
