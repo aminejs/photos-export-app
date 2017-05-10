@@ -13,7 +13,7 @@
           <app-photo v-for="(photo, index) in photosPerPage" :key="index"> 
               <div class="container">
                 <img :src="photo" :alt="photo" class="img-rounded img-thumbnail">               
-                  <input type="checkbox" :value="photo" v-model="selectedPhotos"> 
+                <input type="checkbox" class="large-checkbox" :value="photo" v-model="selectedPhotos"> 
               </div>            
           </app-photo>
       </form>
@@ -148,4 +148,5 @@
 
 <style scoped>
     .some-top-magin { margin-top:20px; }
+    .large-checkbox {width: 20px; height: 20px;}
 </style>

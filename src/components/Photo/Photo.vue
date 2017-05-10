@@ -8,6 +8,5 @@
 </script>
 
 <style scoped>
-.container { position: relative; width: 300px; height: 300px; float: left;}
-.checkbox { position: absolute; bottom: 0px; right: 0px; }
+.container { position: relative; width: 300px; height: 300px;}
 </style>
