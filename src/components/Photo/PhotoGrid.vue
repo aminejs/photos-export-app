@@ -1,7 +1,13 @@
 <template>
   <div>
       <div class="row">
-        <div class="col-md-8"><h1>{{ currentAlbum }} Album </h1></div>
+        <div class="col-md-4"><h1>{{ currentAlbum }} Album </h1></div>
+        <div class="col-md-4">
+            <p class="text-info"><strong>Please select the photos you want to upload!</strong></p>
+           <!-- bind 'selectedPhotos.length' and 'albumsPhoto.length' respectively to ':countSelectedPhotos' and ':countTotalPhotos' to pass them to the ProgressBar child component-->
+            <app-progress-bar :countSelectedPhotos="selectedPhotos.length" :countTotalPhotos="albumsPhoto.length">
+            </app-progress-bar>
+        </div>
         <div class="col-md-4 text-center some-top-magin">
             <button class="btn btn-success" @click="confirmPhoto" :disabled="confirmButton">Confirm</button>
            <app-photo-selected v-if="isSelected"></app-photo-selected>
@@ -39,6 +45,7 @@
     import Photo from './Photo.vue'
     import PhotoSelected from './Messages/PhotoSelected.vue'
     import PhotoUploaded from './Messages/PhotoUploaded.vue'
+    import ProgressBar from './Progressbar/ProgressBar.vue'
     
     export default {
         data: function(){
@@ -139,7 +146,8 @@
         components: {
             appPhoto: Photo,
             appPhotoSelected: PhotoSelected,
-            appPhotoUploaded: PhotoUploaded
+            appPhotoUploaded: PhotoUploaded,
+            appProgressBar: ProgressBar
         },
         //code to exexute during the created phase of the component lifecycle
         created(){
