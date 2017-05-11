@@ -117,7 +117,7 @@
                            .then(response => {
                                 if(response.status === 200){
                                     this.confirmButton = false;
-                                    this.$router.push('/'+this.albumId+'/success');
+                                    this.$router.push(`/${this.albumId}/success`);
                                 }else{
                                     this.isUploaded = true;
                                 }

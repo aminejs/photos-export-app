@@ -64,7 +64,7 @@
           }; 
         },
         methods: {
-          countPage: function(){
+          countPage(){
               let pageNumber = this.albums.length/this.perPage;
               this.totalPages = pageNumber;
               
