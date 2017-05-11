@@ -3,12 +3,14 @@
       <h1>Your Albums</h1>
       <hr>
           <app-album v-for="album in albumsPerPage" :key="album.id">
+              <router-link :to="{path: '/'+album.id}">
                   <div class="col-lg-12 col-lg-offset-2">
                       <img :src="album.firstPic" :alt="album.name" class="img-rounded" height="300" width="300">
                   </div>          
                   <div class="col-lg-12 text-center">
-                      <router-link :to="{path: '/'+album.id}">{{ album.name }}</router-link>                  
-                  </div>                                     
+                      <p class="album-name-font">{{ album.name }}</p>
+                  </div>  
+              </router-link>
           </app-album>  
       <footer>
             <div class="row">
@@ -100,3 +102,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .album-name-font {font-family: lobster, monospace; font-size: 30px;}
+    img {box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);}
+    img:hover{box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 12px 40px 0 rgba(0, 0, 0, 0.19); opacity: 0.9;}
+</style>
