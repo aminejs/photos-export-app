@@ -3,7 +3,8 @@
       <h1>Your Albums</h1>
       <hr>
           <app-album v-for="album in albumsPerPage" :key="album.id">
-              <router-link :to="{path: '/'+album.id}">
+              <!--use 'router-link' instead of anchor tag to avoid the default behavior, because anchor tag will always send the request to the server and reload the page. but 'router-link' just load the the component of the currently active route without leaving the app -->
+              <router-link :to="{path: '/'+album.id}"> <!--pass the album id dynamically-->
                   <div class="col-lg-12 col-lg-offset-2">
                       <img :src="album.firstPic" :alt="album.name" class="img-rounded" height="300" width="300">
                   </div>          
@@ -15,6 +16,7 @@
       <footer>
             <div class="row">
                 <div class="col-lg-12 text-center">
+                <!--pagination-->
                       <paginate
                         :page-count="totalPages"
                         :click-handler="paginationClick"
@@ -34,6 +36,7 @@
     export default {
         data: function(){
           return{
+              //'albums' is the array i suppose to get from facebook. i created it myself
               albums: [{name: "dogs",id: 1,firstPic: 'https://cdn.pixabay.com/photo/2016/06/12/04/01/bonjour-xiufeng-downtown-            1451408_960_720.jpg'},
                        {name: "cats",id: 2, firstPic: 'https://cdn.pixabay.com/photo/2015/03/23/22/56/cat-686803_960_720.jpg'},
                        {name: "black & white",id: 3, firstPic: 'https://cdn.pixabay.com/photo/2016/11/12/07/46/glass-1818417_960_720.jpg'},
@@ -58,12 +61,13 @@
                        {name: "monkeys",id: 22, firstPic: 'https://cdn.pixabay.com/photo/2012/02/27/17/00/animal-17474_960_720.jpg'},
                        {name: "tigers",id: 23, firstPic: 'https://cdn.pixabay.com/photo/2013/07/18/20/26/tiger-165039_960_720.jpg'},
                        {name: "rabbits",id: 24, firstPic: 'https://cdn.pixabay.com/photo/2017/04/05/23/25/rabbit-2206752_960_720.jpg'}],
-              totalPages: 0,
-              albumsPerPage: [],
-              perPage: 6
+              totalPages: 0, //holds the total pages
+              albumsPerPage: [], //filled with the elements to display depending on the page number of the pagination
+              perPage: 6 //the number of albums you want to display per page
           }; 
         },
         methods: {
+          //calculate the number of pages that will be diplayed in the pagination component. and fill the 'albumsPerPage' array with the appropriate elements    
           countPage(){
               let pageNumber = this.albums.length/this.perPage;
               this.totalPages = pageNumber;
@@ -80,15 +84,18 @@
               this.totalPages = pageNumber;
               
           },
+          //'paginationClick' function executes when any page of the pagination gets clicked, and retrieve the right elements from 'albums' array and store them in the 'albumsPerPage' array    
           paginationClick (pageNum) {
               this.albumsPerPage = [];
               let arrayEnd = (pageNum * this.perPage);
               this.albumsPerPage = this.albums.slice((arrayEnd - this.perPage),arrayEnd);            
           }  
         },
+        //register 'Album' component locally
         components: {
             appAlbum: Album
         },
+        //code to exexute during the created phase of the component lifecycle
         created(){
             function compare(a,b) {
               if (a.name.toLowerCase() < b.name.toLowerCase())
@@ -97,8 +104,8 @@
                 return 1;
               return 0;
             }
-            this.albums.sort(compare);
-            this.countPage();
+            this.albums.sort(compare); //sort the albums array by name
+            this.countPage();//call the 'coutpage' function
         }
     }
 </script>

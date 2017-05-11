@@ -21,6 +21,7 @@
       <footer>
             <div class="row">
                 <div class="col-lg-12 text-center">
+                      <!--pagination-->
                       <paginate
                         :page-count="totalPages"
                         :click-handler="paginationClick"
@@ -42,9 +43,11 @@
     export default {
         data: function(){
           return{
-              userId: '123456',
-              currentAlbum: '',
+              userId: '123456', //user id i suppose to get from facebook graph api. i created if myself
+              currentAlbum: '', //holds the name of the current album
+              //'albumId' property holds the album id passed in the currently active route
               albumId: this.$route.params.albumID,
+              //'albums' is the array i suppose to get from facebook. i created it myself
               albums: [{name: "dogs",id: 1,pictures: ['https://cdn.pixabay.com/photo/2016/07/07/15/35/puppy-1502565_960_720.jpg']},
                        {name: "cats",id: 2, pictures: ['https://cdn.pixabay.com/photo/2015/03/23/22/56/cat-686803_960_720.jpg']},
                        {name: "black & white",id: 3, pictures: ['https://cdn.pixabay.com/photo/2016/11/12/07/46/glass-1818417_960_720.jpg']},
@@ -69,17 +72,18 @@
                        {name: "monkeys",id: 22, pictures: ['https://cdn.pixabay.com/photo/2012/02/27/17/00/animal-17474_960_720.jpg']},
                        {name: "tigers",id: 23, pictures: ['https://cdn.pixabay.com/photo/2013/07/18/20/26/tiger-165039_960_720.jpg']},
                        {name: "rabbits",id: 24, pictures: ['https://cdn.pixabay.com/photo/2017/04/05/23/25/rabbit-2206752_960_720.jpg']}],
-              confirmButton: false,
-              isSelected: false,
-              isUploaded: false,
-              albumsPhoto: [],         
-              totalPages: 0,
-              photosPerPage: [],
-              selectedPhotos: [],
-              perPage: 9
+              confirmButton: false, //used to disable or enable the confirm button
+              isSelected: false, //used to attach or detach 'PhotoSelected' component to the DOM
+              isUploaded: false, //used to attach or detach 'PhotoUploaded' component to the DOM
+              albumsPhoto: [], //holds the photos of the current album        
+              totalPages: 0, //holds the total pages
+              photosPerPage: [], //filled with the elements to display depending on the page number of the pagination
+              selectedPhotos: [], //holds the selected photos to send to firebase
+              perPage: 9 //the number of photos you want to display per page
           }; 
         },
         methods: {
+          //calculate the number of pages that will be diplayed in the pagination component. and fill the 'photosPerPage' array with the appropriate elements  
           countPage(){
               let pageNumber = this.albumsPhoto.length/this.perPage;
               this.totalPages = pageNumber;
@@ -96,11 +100,13 @@
               this.totalPages = pageNumber;
               
           },
+          //'paginationClick' function executes when any page of the pagination gets clicked, and retrieve the right elements from 'albumsPhoto' array and store them in the 'photosPerPage' array     
           paginationClick(pageNum) {
               this.albumsPerPage = [];
               let arrayEnd = (pageNum * this.perPage);
               this.photosPerPage = this.albumsPhoto.slice((arrayEnd - this.perPage),arrayEnd);            
           },
+          //executes when the confirm button is clicked. handles errors and sends selected photos to firebase database    
           confirmPhoto(){
              if(this.selectedPhotos.length === 0){
                  this.isSelected = true;
@@ -129,19 +135,21 @@
              
          }    
         },
+        //register 'Photo','PhotoSelected' and 'PhotoUploaded' components locally
         components: {
             appPhoto: Photo,
             appPhotoSelected: PhotoSelected,
             appPhotoUploaded: PhotoUploaded
         },
+        //code to exexute during the created phase of the component lifecycle
         created(){
             for (let i = 0; i < this.albums.length; i++) {
               if (this.albumId == this.albums[i].id) {
-                this.currentAlbum = this.albums[i].name;
-                this.albumsPhoto = this.albums[i].pictures;
+                this.currentAlbum = this.albums[i].name; //retrieve the name of the album and store it in the 'currentAlbum' property
+                this.albumsPhoto = this.albums[i].pictures; //fill the 'albumsPhoto' array with the photos of the current album
               }
             }
-            this.countPage();
+            this.countPage(); //call the 'countPage' function
         }
     }
 </script>

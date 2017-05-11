@@ -8,6 +8,7 @@
                 </div>
                 
                 <br/>
+                <!--use 'router-link' instead of anchor tag to avoid the default behavior, because anchor tag will always send the request to the server and reload the page. but 'router-link' just load the the component of the currently active route without leaving the app -->
                 <router-link to="/">
                     <a class="btn btn-success">
                         <span class="glyphicon glyphicon-home"></span> Take Me Home
@@ -24,7 +25,8 @@
     export default {
         data: function(){
           return{
-              currentAlbum: '',
+              currentAlbum: '', //holds the name of the current album
+              //'albumId' property holds the album id passed in the currently active route
               albumId: this.$route.params.albumID,
               albums: [{name: "dogs",id: 1},{name: "cats",id: 2},{name: "black & white",id: 3},{name: "coffee",id: 4},
                        {name: "horses",id: 5},{name: "backgounds",id: 6},{name: "nature",id: 7},{name: "music",id: 8},
@@ -34,7 +36,9 @@
                        {name: "london",id: 21},{name: "monkeys",id: 22},{name: "tigers",id: 23},{name: "rabbits",id: 24}]
           }; 
         },
+        //code to exexute during the created phase of the component lifecycle
         created(){
+            //retrieve the name of the album and store it in the 'currentAlbum' property
             for (let i = 0; i < this.albums.length; i++) {
               if (this.albumId == this.albums[i].id) {
                 this.currentAlbum = this.albums[i].name;
